@@ -23,6 +23,10 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
 }
 
 const StatisticLine = ({text, value}) => <tr><td>{text}</td><td>{value}</td></tr>
+const Anecdote = ({anecdotes, selected, votes}) => <div>
+      {anecdotes[selected]}
+      <p>has {votes[selected]} votes</p>
+      </div>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -58,7 +62,7 @@ const App = () => {
     setPositive((good/tot) * 100)
   }
 
-  const positvePercentage = positive + " %"
+  const positivePercentage = positive + " %"
 
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -77,18 +81,33 @@ const App = () => {
     setSelected(randomNumber);
   }
 
+  const [votes, setVotes] = useState(Array(8).fill(0));
+  const captureVotes = ({index}) => {
+    const copy = [...votes]
+    copy[index] += 1;
+    setVotes(copy)
+  }
+
+  const mostVotedIndex = votes.indexOf(Math.max(...votes))
+
+
   return (
     <div>
       <Header text="give feedback"/>
       <Button onClick={handleGoodClick} text="good"/>
       <Button onClick={handleNeutralClick} text="neutral"/>
       <Button onClick={handleBadClick} text="bad"/>
+
       <Header text="statistics"/>
-      <Statistics good={good} bad={bad} neutral={neutral} all={total} average={average} positive={positvePercentage}/>
-      <div>
-      {anecdotes[selected]}
-      </div>
+      <Statistics good={good} bad={bad} neutral={neutral} all={total} average={average} positive={positivePercentage}/>
+
+      <Header text="Anecdote of the day"/>
+      <Anecdote anecdotes={anecdotes} selected={selected} votes={votes}/>
+      <Button onClick={() => captureVotes({ index: selected })} text="vote"/>
       <Button onClick={handleSelection} text="next anecdote"/>
+      
+      <Header text="Anecdote with most votes"/>
+      <Anecdote anecdotes={anecdotes} selected={mostVotedIndex} votes={votes}/>
     </div>
   )
 }
