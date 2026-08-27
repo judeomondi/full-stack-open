@@ -1,3 +1,5 @@
+import { Fragment } from "react"
+
 const Header = (props) => <h1>{props.course}</h1>
 
 const Content = (props) => (
@@ -14,14 +16,16 @@ const Part = (props) => (
 
 const Total = (props) => <p><b>total of {props.parts.reduce((sum, part) => sum + part.exercises, 0)} exercises</b></p>
 
-const Course = ({course}) => {
+const Course = ({courses}) => {
     return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total
-        parts={course.parts}
-      />
+        {courses.map(course => 
+            <Fragment key={course.id}>
+                <Header course={course.name} />
+                <Content parts={course.parts} />
+                <Total parts={course.parts}/>
+            </Fragment>
+            )}
     </div>
   )
 }
