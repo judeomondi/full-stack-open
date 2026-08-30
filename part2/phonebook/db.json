@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "042-123456",
       "id": "1"
     },
     {
@@ -21,9 +21,9 @@
       "id": "4"
     },
     {
-      "name": "Jude",
-      "number": "34-456-3567883",
-      "id": "QJkeSgG8c9c"
+      "name": "Art Hellas",
+      "number": "041-123456",
+      "id": "OJZ46XfW-j4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
