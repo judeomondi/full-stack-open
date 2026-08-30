@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   const [addContactSucessNotification, setAddContactSuccessNotification] = useState(null)
+  const [notificationClassName, setNotificationClassName] = useState('successfulNotification')
 
   const hook = () => {
       phonebookService
@@ -55,6 +56,7 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotificationClassName('successfulNotification')
         setAddContactSuccessNotification('Added ' + returnedPerson.name)
         setTimeout(() => {
           setAddContactSuccessNotification(null)
@@ -89,14 +91,18 @@ const App = () => {
         setPersons(persons.filter(person => person.id !== id))
       })
       .catch(error => {
-        console.log('Exception caught: ' + error)
+        setNotificationClassName('errorNotification')
+        setAddContactSuccessNotification(`Information of ${name} has already been removed from the server`)
+        setTimeout(() => {
+          setAddContactSuccessNotification(null)
+        }, 5000)
       })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={addContactSucessNotification}/>
+      <Notification message={addContactSucessNotification} className={notificationClassName}/>
       <Filter nameFilter={nameFilter} onChangeFilter={onChangeFilter}/>
       <h2>add a new</h2>
       <PersonForm addContact={addContact}
