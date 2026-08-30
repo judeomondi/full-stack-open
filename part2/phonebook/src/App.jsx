@@ -53,6 +53,23 @@ const App = () => {
 
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(nameFilter.toLowerCase()))
 
+  const deleteContactOf = (id, name) => {
+
+    const confirmDelete = window.confirm(`Delete ${name} ?`)
+    if(!confirmDelete){
+      return
+    }
+
+    phonebookService
+      .deleteById(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+      .catch(error => {
+        console.log('Exception caught: ' + error)
+      })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -65,7 +82,7 @@ const App = () => {
        onChangeNumber={onChangeNumber}
        />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons}/>
+      <Persons filteredPersons={filteredPersons} deleteContact={deleteContactOf}/>
     </div>
   )
 }
