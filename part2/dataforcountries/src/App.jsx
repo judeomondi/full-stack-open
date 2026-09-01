@@ -1,0 +1,68 @@
+import { useState, useEffect } from 'react'
+import countriesService from './services/Countries'
+
+const CountryFilter = ({filteredCountries}) => {
+
+  if(filteredCountries.length === 0){
+    return
+  }
+
+  if(filteredCountries.length > 10){
+    return <p>Too many matches, specify another filter</p>
+  }
+
+  if(filteredCountries.length < 10 && filteredCountries.length > 1){
+    return (
+      <div>
+        {filteredCountries.map((country) => <p key={country.cca3}>{country.name.common}</p>)}
+      </div>
+    )
+  }
+
+  const country = filteredCountries[0]
+
+  return (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>Capital {country.capital}</p>
+      <p>Area {country.area}</p>
+      <h1>Languages</h1>
+      <ul>{Object.entries(country.languages).map(([code, name]) => (<li key={code}>{name}</li>))}</ul>
+      <img src={country.flags.png} alt={country.name.common} />
+    </div>
+  )
+}
+
+const App = () => {
+
+  const [countries, setCountries] = useState([])
+  const [country, setCountry] = useState('')
+
+  const hook = () => {
+    countriesService.getAll()
+    .then(returnedData => {
+        setCountries(returnedData)
+      })
+      .catch(error => {
+        console.log('Exception caught' + error)
+      })
+  }
+
+  useEffect(hook, [])
+
+  const handleOnChange = (event) => {
+    setCountry(event.target.value)
+  }
+
+  const filteredCountries = countries.filter(c => c.name.common.toLowerCase().includes(country.toLocaleLowerCase()))
+ 
+  return (
+   <div>
+    {console.log(filteredCountries)}
+    <p>find countries <input value={country} onChange={handleOnChange}/></p>
+    <CountryFilter filteredCountries={filteredCountries}/>
+   </div>
+  )
+}
+
+export default App
