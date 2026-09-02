@@ -3,6 +3,8 @@ import countriesService from './services/Countries'
 
 const CountryFilter = ({filteredCountries}) => {
 
+  const [selectedCountryDetails, setSelectedCountryDetails] = useState(null)
+
   if(filteredCountries.length === 0){
     return
   }
@@ -14,13 +16,20 @@ const CountryFilter = ({filteredCountries}) => {
   if(filteredCountries.length < 10 && filteredCountries.length > 1){
     return (
       <div>
-        {filteredCountries.map((country) => <p key={country.cca3}>{country.name.common}</p>)}
+        {filteredCountries.map((country) =>
+           <div key={country.cca3}>{country.name.common} <button onClick={() => setSelectedCountryDetails(country)}>show</button> <br/>
+            {selectedCountryDetails === country && <CountryDetails country={country}/>}
+            </div>)}   
       </div>
     )
   }
 
   const country = filteredCountries[0]
+  return <CountryDetails country={country}/>
+  
+}
 
+const CountryDetails = ({country}) => {
   return (
     <div>
       <h1>{country.name.common}</h1>
