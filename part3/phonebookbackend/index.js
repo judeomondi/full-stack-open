@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-const persons = [
+let persons = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -42,6 +42,12 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         return response.status(404).end(`person with id ${id} is not found`)
     }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    persons = persons.filter(p => p.id !== id)
+    return response.status(204).end()
 })
 
 const PORT = 3001
