@@ -48,12 +48,14 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    const person = persons.find(p => p.id === id)
-    if(person){
+    const person = Person.findById(id).then(returnedPerson => {
+        response.json(returnedPerson)
+    })
+    /*if(person){
         return response.json(person)
     } else {
         return response.status(404).end(`person with id ${id} is not found`)
-    }
+    }*/
 })
 
 app.delete('/api/persons/:id', (request, response) => {
