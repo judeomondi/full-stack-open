@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 app.use(express.static('dist'))
+app.use(express.json())
 app.use(cors())
 
 morgan.token('body', (req) => JSON.stringify(req.body))
@@ -61,9 +62,9 @@ app.delete('/api/persons/:id', (request, response) => {
     return response.status(204).end()
 })
 
-const generateId = () => {
+/*const generateId = () => {
     return Math.floor(Math.random() * 100) + 1
-}
+}*/
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -78,18 +79,18 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({ error: 'number is missing' })
     }
 
-    if(persons.find(person => person.name.toLowerCase() === name.toLowerCase())){
+    /*if(persons.find(person => person.name.toLowerCase() === name.toLowerCase())){
         return response.status(400).json({ error: 'name must be unique' })
-    }
+    }*/
 
-    const person = {
-        id: generateId(),
+    const person = new Person({
         name: name,
         number: number
-    }
+    })
 
-    persons = persons.concat(person)
-    return response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT || 3001
