@@ -103,7 +103,7 @@ const unknownendpoint = (request, response) => {
 app.use(unknownendpoint)
 
 const errorHandler = (error, request, response, next) => {
-    console.log(error.message)f
+    console.log(error.message)
     if(error.name === 'CastError'){
         response.status(400).json({error: 'malformed id'})
     }
