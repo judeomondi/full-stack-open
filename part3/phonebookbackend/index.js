@@ -96,6 +96,22 @@ app.post('/api/persons', (request, response) => {
     })
 })
 
+const unknownendpoint = (request, response) => {
+    response.status(400).json({error: 'unknown endpoint'})
+}
+
+app.use(unknownendpoint)
+
+const errorHandler = (error, request, response, next) => {
+    console.log(error.message)f
+    if(error.name === 'CastError'){
+        response.status(400).json({error: 'malformed id'})
+    }
+    next(error)
+}
+
+app.use(errorHandler)
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, ()=>{
     console.log(`application is listening to port ${PORT}`)
